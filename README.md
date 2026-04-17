@@ -55,6 +55,24 @@ Useful for local testing:
 SET app.jwt_secret = 'replace-with-a-strong-random-secret';
 ```
 
+To generate a strong secret safely, use one of these methods:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+```bash
+openssl rand -base64 32
+```
+
+Other safe options:
+
+- `python -c "import secrets; print(secrets.token_hex(32))"` for a hex-encoded secret
+- PostgreSQL: `SELECT encode(gen_random_bytes(32), 'base64');` after enabling `pgcrypto`
+- `pwgen -s 32 1` if `pwgen` is installed on your system
+
+Use a fresh random value for each environment, and keep the secret at least 32 bytes long before encoding when possible.
+
 ### Option 2: Set It For A Database
 
 Useful when you want the setting to persist for all future connections to one database:
